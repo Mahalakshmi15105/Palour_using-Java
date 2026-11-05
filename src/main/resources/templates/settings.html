@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: html_head('Salon Settings')}"></head>
+<body>
+
+<div th:replace="~{fragments/layout :: app_shell(~{::#settingsContent})}">
+    <div id="settingsContent">
+        
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-title-wrap">
+                <h2>Salon Settings & Enterprise Configuration</h2>
+                <p>Configure salon profile, multi-branch operations, tax/GST rates, receipt templates, and staff roles.</p>
+            </div>
+            <div class="page-actions">
+                <button type="button" class="btn btn-salon-primary" onclick="showToast('Salon settings successfully saved!', 'success')">
+                    <i class="bi bi-check2-circle me-1"></i> Save Changes
+                </button>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left Navigation Pills -->
+            <div class="col-12 col-md-3">
+                <div class="list-group shadow-sm rounded-4 overflow-hidden">
+                    <button class="list-group-item list-group-item-action active py-3 fw-semibold border-0" id="tab-profile">
+                        <i class="bi bi-shop me-2"></i> Salon Profile & Brand
+                    </button>
+                    <button class="list-group-item list-group-item-action py-3 fw-semibold border-0" id="tab-branches">
+                        <i class="bi bi-building me-2"></i> Branches & Outlets
+                    </button>
+                    <button class="list-group-item list-group-item-action py-3 fw-semibold border-0" id="tab-tax">
+                        <i class="bi bi-percent me-2"></i> Tax & GST Setup
+                    </button>
+                    <button class="list-group-item list-group-item-action py-3 fw-semibold border-0" id="tab-receipt">
+                        <i class="bi bi-receipt me-2"></i> Invoice Receipt Template
+                    </button>
+                    <button class="list-group-item list-group-item-action py-3 fw-semibold border-0" id="tab-sms">
+                        <i class="bi bi-chat-dots me-2"></i> SMS & WhatsApp API
+                    </button>
+                    <button class="list-group-item list-group-item-action py-3 fw-semibold border-0" id="tab-security">
+                        <i class="bi bi-shield-lock me-2"></i> Roles & Security
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Content Panels -->
+            <div class="col-12 col-md-9">
+                <!-- Salon Profile Card -->
+                <div class="salon-card mb-4">
+                    <div class="salon-card-header">
+                        <h5 class="salon-card-title"><i class="bi bi-shop text-primary"></i> General Salon Identity</h5>
+                    </div>
+                    <div class="salon-card-body">
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label small fw-bold">Salon Business Name</label>
+                                <input type="text" class="form-control" value="SmartGoNext Luxury Lounge & Spa">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label small fw-bold">Tagline / Brand Slogan</label>
+                                <input type="text" class="form-control" value="Next-Gen Beauty & Wellness Experience">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label small fw-bold">Primary Contact Phone</label>
+                                <input type="tel" class="form-control" value="+1 (555) 789-2233">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label small fw-bold">Official Support Email</label>
+                                <input type="email" class="form-control" value="contact@smartgonextsalon.com">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Headquarters Address</label>
+                            <input type="text" class="form-control" value="742 Evergreen Promenade, Suite 100, Downtown">
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label small fw-bold">Salon Opening Time</label>
+                                <input type="time" class="form-control" value="09:00">
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label small fw-bold">Salon Closing Time</label>
+                                <input type="time" class="form-control" value="21:00">
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label small fw-bold">Default Currency</label>
+                                <select class="form-select">
+                                    <option value="USD" selected>USD ($)</option>
+                                    <option value="INR">INR (₹)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tax & Invoicing Card -->
+                <div class="salon-card">
+                    <div class="salon-card-header">
+                        <h5 class="salon-card-title"><i class="bi bi-receipt-cutoff text-success"></i> Billing & Receipt Header/Footer</h5>
+                    </div>
+                    <div class="salon-card-body">
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label small fw-bold">Tax / GST Number</label>
+                                <input type="text" class="form-control" value="GSTIN-33AAECS1234F1Z5">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label small fw-bold">Default Tax Rate (%)</label>
+                                <input type="number" class="form-control" value="8.00" step="0.5">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Receipt Header Note</label>
+                            <input type="text" class="form-control" value="SmartGoNext - Premium Beauty Care & Esthetics">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Receipt Footer Thank You Message</label>
+                            <textarea class="form-control" rows="2">Thank you for visiting SmartGoNext! Tag us on Instagram @smartgonextsalon for 10% off your next session.</textarea>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="button" class="btn btn-salon-primary" onclick="showToast('Tax and receipt settings saved', 'success')">
+                                <i class="bi bi-save me-1"></i> Update Billing Config
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="gemGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d946ef"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#d4a373"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#0b0f19"/>
+  <path d="M20 18 L44 18 L52 28 L32 50 L12 28 Z" fill="url(#gemGrad)" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M20 18 L32 50 L44 18 M12 28 L52 28 M32 18 L32 28" stroke="#ffffff" stroke-width="1.2" opacity="0.6"/>
+</svg>
+

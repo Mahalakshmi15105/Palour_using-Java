@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: html_head('Membership & Loyalty')}"></head>
+<body>
+
+<div th:replace="~{fragments/layout :: app_shell(~{::#membershipContent})}">
+    <div id="membershipContent">
+        
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-title-wrap">
+                <h2>Loyalty Club & Membership Programs</h2>
+                <p>Retain loyal salon clients with premium recurring tier packages, reward credits, and discounts.</p>
+            </div>
+            <div class="page-actions">
+                <button type="button" class="btn btn-salon-outline">
+                    <i class="bi bi-gift me-1"></i> Issue Reward Points
+                </button>
+                <button type="button" class="btn btn-salon-primary" data-bs-toggle="modal" data-bs-target="#newTierModal">
+                    <i class="bi bi-award-fill me-1"></i> Create Membership Tier
+                </button>
+            </div>
+        </div>
+
+        <!-- Tiers Grid Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-md-6 col-xl-3" th:each="tier : ${tiers}">
+                <div class="salon-card h-100 mb-0 position-relative">
+                    <div class="salon-card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge px-3 py-2 rounded-pill fw-bold"
+                                  th:style="'background-color: ' + ${tier.badgeColor} + '25; color: ' + ${tier.badgeColor} + '; border: 1px solid ' + ${tier.badgeColor}"
+                                  th:text="${tier.name}">
+                                Platinum VIP
+                            </span>
+                            <span class="small text-muted" th:text="${tier.validityMonths} + ' Months'">12 Months</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="fs-2 fw-bold text-dark" th:text="'$' + ${#numbers.formatDecimal(tier.price, 1, 0)}">$499</span>
+                            <span class="text-muted small"> / package</span>
+                        </div>
+
+                        <div class="badge bg-success-subtle text-success border border-success-subtle py-2 mb-3 text-start">
+                            <i class="bi bi-percent me-1"></i> <span th:text="${tier.discountPercent} + '% off all services & retail'">20% off all services</span>
+                        </div>
+
+                        <ul class="list-unstyled small text-muted mb-4 flex-grow-1">
+                            <li class="mb-2 d-flex align-items-start gap-2" th:each="perk : ${tier.benefits}">
+                                <i class="bi bi-check-circle-fill text-primary mt-1"></i>
+                                <span th:text="${perk}">Perk description</span>
+                            </li>
+                        </ul>
+
+                        <div class="pt-3 border-top d-flex align-items-center justify-content-between mt-auto">
+                            <span class="small text-muted">Subscribed: <strong class="text-dark" th:text="${tier.memberCount} + ' guests'">98 guests</strong></span>
+                            <button class="btn btn-sm btn-outline-primary" onclick="showToast('Viewing member list for ' + this.closest('.salon-card-body').querySelector('.badge').textContent, 'info')">
+                                Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIP Members Active List -->
+        <div class="salon-card">
+            <div class="salon-card-header">
+                <h5 class="salon-card-title"><i class="bi bi-stars text-warning"></i> Active Enrolled VIP Members</h5>
+            </div>
+            <div class="salon-card-body p-0">
+                <div class="table-responsive">
+                    <table class="table salon-table">
+                        <thead>
+                            <tr>
+                                <th>Client Name</th>
+                                <th>Contact</th>
+                                <th>Subscribed Tier</th>
+                                <th>Points Balance</th>
+                                <th>Total Visits</th>
+                                <th>Member Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="c : ${vipCustomers}" th:if="${c.membershipTier != 'Walk-in'}">
+                                <td class="fw-bold text-dark" th:text="${c.name}">Sophia Turner</td>
+                                <td class="text-muted small" th:text="${c.phone}">+1 (555) 234-8901</td>
+                                <td>
+                                    <span class="tier-badge"
+                                          th:classappend="${c.membershipTier == 'Platinum VIP' ? 'tier-platinum' : 
+                                                           (c.membershipTier == 'Gold Club' ? 'tier-gold' : 'tier-silver')}"
+                                          th:text="${c.membershipTier}">
+                                        Platinum VIP
+                                    </span>
+                                </td>
+                                <td>
+                                    <strong class="text-primary" th:text="${c.loyaltyPoints} + ' pts'">1,450 pts</strong>
+                                </td>
+                                <td th:text="${c.visitsCount} + ' salon visits'">24 salon visits</td>
+                                <td>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Active Member
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+

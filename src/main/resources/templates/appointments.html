@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: html_head('Appointments Calendar')}"></head>
+<body>
+
+<div th:replace="~{fragments/layout :: app_shell(~{::#appointmentsContent})}">
+    <div id="appointmentsContent">
+        
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-title-wrap">
+                <h2>Appointment Calendar & Booking Manager</h2>
+                <p>Real-time salon chair allocation, time slot reservations, stylist assignment, and client queue.</p>
+            </div>
+            <div class="page-actions">
+                <div class="btn-group">
+                    <button class="btn btn-salon-outline"><i class="bi bi-chevron-left"></i></button>
+                    <button class="btn btn-salon-outline fw-bold">Today, 05 Nov 2026</button>
+                    <button class="btn btn-salon-outline"><i class="bi bi-chevron-right"></i></button>
+                </div>
+                <button type="button" class="btn btn-salon-primary" data-bs-toggle="modal" data-bs-target="#newAppointmentModal">
+                    <i class="bi bi-calendar-plus-fill me-1"></i> Book Appointment
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+            <div class="btn-group btn-group-sm">
+                <button class="btn btn-dark active">All Bookings (34)</button>
+                <button class="btn btn-outline-secondary">In-Chair (6)</button>
+                <button class="btn btn-outline-secondary">Waiting (4)</button>
+                <button class="btn btn-outline-secondary">Confirmed (6)</button>
+                <button class="btn btn-outline-secondary">Completed (18)</button>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="small text-muted">Stylist Filter:</span>
+                <select class="form-select form-select-sm" style="width: 180px;">
+                    <option value="">All Stylists</option>
+                    <option th:each="emp : ${employees}" th:value="${emp.id}" th:text="${emp.name}">Priya Sharma</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Appointments Table Card -->
+        <div class="salon-card">
+            <div class="salon-card-header">
+                <h5 class="salon-card-title"><i class="bi bi-calendar2-week text-primary"></i> Scheduled Sessions Queue</h5>
+                <span class="badge bg-light text-dark border">Auto-refreshed 2 mins ago</span>
+            </div>
+            <div class="salon-card-body p-0">
+                <div class="table-responsive">
+                    <table class="table salon-table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Client Details</th>
+                                <th>Requested Treatment</th>
+                                <th>Stylist Station</th>
+                                <th>Time Slot</th>
+                                <th>Service Fee</th>
+                                <th>Current Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="apt : ${appointments}">
+                                <td class="font-monospace fw-bold text-dark" th:text="${apt.id}">APT-1092</td>
+                                <td>
+                                    <div class="fw-bold text-dark" th:text="${apt.customerName}">Sophia Turner</div>
+                                    <div class="text-muted small" th:text="${apt.customerPhone}">+1 (555) 234-8901</div>
+                                </td>
+                                <td>
+                                    <span class="fw-semibold text-dark" th:text="${apt.serviceName}">Hydra-Glow Facial & Mask</span>
+                                </td>
+                                <td>
+                                    <i class="bi bi-person-fill text-primary me-1"></i>
+                                    <span th:text="${apt.stylistName}">Priya Sharma</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark border fw-bold" th:text="${apt.timeSlot}">10:30 AM</span>
+                                </td>
+                                <td class="fw-bold text-dark" th:text="'$' + ${#numbers.formatDecimal(apt.amount, 1, 2)}">$145.00</td>
+                                <td>
+                                    <span class="badge-status" 
+                                          th:classappend="${apt.status == 'In-Chair' ? 'badge-in-chair' : 
+                                                           (apt.status == 'Waiting' ? 'badge-waiting' : 
+                                                           (apt.status == 'Confirmed' ? 'badge-confirmed' : 'badge-completed'))}">
+                                        <i class="bi bi-dot"></i>
+                                        <span th:text="${apt.status}">In-Chair</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a th:href="@{/billing}" class="btn btn-outline-success" title="Checkout at POS">
+                                            <i class="bi bi-receipt"></i>
+                                        </a>
+                                        <button class="btn btn-outline-secondary" title="Change Status" onclick="showToast('Status updated for ' + this.closest('tr').querySelector('.fw-bold').textContent, 'info')">
+                                            <i class="bi bi-arrow-repeat"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger" title="Cancel Slot">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Book Appointment Modal -->
+        <div class="modal fade" id="newAppointmentModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold"><i class="bi bi-calendar-plus text-primary me-2"></i>Book Salon Appointment</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Client Name / Phone</label>
+                                <input type="text" class="form-control" placeholder="Search or type client name...">
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">Select Service</label>
+                                    <select class="form-select">
+                                        <option th:each="srv : ${services}" th:value="${srv.id}" th:text="${srv.name} + ' ($' + ${srv.price} + ')'">Keratin Therapy</option>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">Select Stylist</label>
+                                    <select class="form-select">
+                                        <option th:each="emp : ${employees}" th:value="${emp.id}" th:text="${emp.name} + ' (' + ${emp.role} + ')'">Priya Sharma</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">Appointment Date</label>
+                                    <input type="date" class="form-control" value="2026-11-05">
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold">Time Slot</label>
+                                    <select class="form-select">
+                                        <option>09:30 AM</option>
+                                        <option>10:30 AM</option>
+                                        <option>11:45 AM</option>
+                                        <option>01:15 PM</option>
+                                        <option>02:30 PM</option>
+                                        <option>04:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Special Notes / Requests</label>
+                                <textarea class="form-control" rows="2" placeholder="e.g. Needs allergen-free hair dye, bridal consultation..."></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-salon-primary" data-bs-dismiss="modal" onclick="showToast('Appointment successfully scheduled!', 'success')">Confirm Booking</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+

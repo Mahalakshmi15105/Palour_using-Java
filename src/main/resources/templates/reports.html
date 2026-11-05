@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: html_head('Analytics & Reports')}"></head>
+<body>
+
+<div th:replace="~{fragments/layout :: app_shell(~{::#reportsContent})}">
+    <div id="reportsContent">
+        
+        <!-- Header -->
+        <div class="page-header">
+            <div class="page-title-wrap">
+                <h2>Business Intelligence & Financial Reports</h2>
+                <p>Track salon revenues, stylist commissions, tax reports, service margins, and customer retention metrics.</p>
+            </div>
+            <div class="page-actions">
+                <button type="button" class="btn btn-salon-outline" onclick="window.print()">
+                    <i class="bi bi-printer me-1"></i> Print Statement
+                </button>
+                <button type="button" class="btn btn-salon-primary" onclick="showToast('Exporting executive PDF financial report...', 'success')">
+                    <i class="bi bi-file-earmark-pdf-fill me-1"></i> Download PDF Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Financial KPI Summary Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="kpi-card p-3">
+                    <div class="small text-muted fw-bold text-uppercase">Month-to-Date Revenue</div>
+                    <div class="fs-4 fw-bold text-dark mt-1">$42,850.00</div>
+                    <small class="text-success"><i class="bi bi-arrow-up-right"></i> +16.2% vs last month</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="kpi-card p-3">
+                    <div class="small text-muted fw-bold text-uppercase">Gross Profit Margin</div>
+                    <div class="fs-4 fw-bold text-success mt-1">68.4%</div>
+                    <small class="text-muted">High treatment markup</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="kpi-card p-3">
+                    <div class="small text-muted fw-bold text-uppercase">Avg. Ticket Size</div>
+                    <div class="fs-4 fw-bold text-primary mt-1">$118.50</div>
+                    <small class="text-success"><i class="bi bi-arrow-up-right"></i> +$12.30 cross-sells</small>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="kpi-card p-3">
+                    <div class="small text-muted fw-bold text-uppercase">Stylist Commissions Due</div>
+                    <div class="fs-4 fw-bold text-dark mt-1">$9,420.00</div>
+                    <small class="text-muted">Payable on Nov 10</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Report Modules Grid -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="salon-card h-100 mb-0">
+                    <div class="salon-card-body d-flex flex-column">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="kpi-icon-wrap icon-sales">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Daily Sales & Cash Register</h6>
+                                <small class="text-muted">Cash, card, UPI settlements</small>
+                            </div>
+                        </div>
+                        <p class="small text-muted flex-grow-1">Detailed breakdown of drawer cash, payment gateway transfers, refunds, and daily register balancing.</p>
+                        <button class="btn btn-sm btn-salon-outline w-100" onclick="showToast('Generating Daily Register Report...', 'info')">
+                            Generate Report <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="salon-card h-100 mb-0">
+                    <div class="salon-card-body d-flex flex-column">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="kpi-icon-wrap icon-employees">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Stylist Commission Ledger</h6>
+                                <small class="text-muted">Tiered performance payouts</small>
+                            </div>
+                        </div>
+                        <p class="small text-muted flex-grow-1">Commission calculations per staff based on completed service volume, add-ons, and retail shelf sales.</p>
+                        <button class="btn btn-sm btn-salon-outline w-100" onclick="showToast('Generating Stylist Commission Ledger...', 'info')">
+                            Generate Report <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="salon-card h-100 mb-0">
+                    <div class="salon-card-body d-flex flex-column">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="kpi-icon-wrap icon-appointments">
+                                <i class="bi bi-scissors"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Treatment Profitability Analysis</h6>
+                                <small class="text-muted">High vs low margin services</small>
+                            </div>
+                        </div>
+                        <p class="small text-muted flex-grow-1">Analyze revenue per chair hour, chemical product consumption, and popularity trends across categories.</p>
+                        <button class="btn btn-sm btn-salon-outline w-100" onclick="showToast('Generating Service Profitability Matrix...', 'info')">
+                            Generate Report <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sample Report Data Snapshot -->
+        <div class="salon-card">
+            <div class="salon-card-header">
+                <h5 class="salon-card-title"><i class="bi bi-table text-primary"></i> Service Category Revenue Contribution (Last 30 Days)</h5>
+                <span class="badge bg-light text-dark border">Consolidated Branches</span>
+            </div>
+            <div class="salon-card-body p-0">
+                <div class="table-responsive">
+                    <table class="table salon-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Appointments Fulfilled</th>
+                                <th>Total Revenue</th>
+                                <th>Average Ticket</th>
+                                <th>Product Cost (COGS)</th>
+                                <th>Net Margin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold text-dark"><i class="bi bi-scissors text-primary me-2"></i>Hair Services & Color</td>
+                                <td>245 sessions</td>
+                                <td class="fw-bold text-dark">$22,480.00</td>
+                                <td>$91.75</td>
+                                <td>$4,120.00</td>
+                                <td><span class="badge bg-success-subtle text-success">81.6%</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-dark"><i class="bi bi-droplet-half text-info me-2"></i>Skin, Facials & Peels</td>
+                                <td>164 sessions</td>
+                                <td class="fw-bold text-dark">$11,840.00</td>
+                                <td>$72.20</td>
+                                <td>$2,450.00</td>
+                                <td><span class="badge bg-success-subtle text-success">79.3%</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-dark"><i class="bi bi-gem text-warning me-2"></i>Nails & Bridal Packages</td>
+                                <td>82 sessions</td>
+                                <td class="fw-bold text-dark">$6,120.00</td>
+                                <td>$74.60</td>
+                                <td>$890.00</td>
+                                <td><span class="badge bg-success-subtle text-success">85.4%</span></td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-dark"><i class="bi bi-flower1 text-secondary me-2"></i>Spa & Body Massage</td>
+                                <td>48 sessions</td>
+                                <td class="fw-bold text-dark">$2,410.00</td>
+                                <td>$50.20</td>
+                                <td>$320.00</td>
+                                <td><span class="badge bg-success-subtle text-success">86.7%</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+

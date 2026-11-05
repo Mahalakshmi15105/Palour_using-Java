@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: html_head('Salon Dashboard')}"></head>
+<body>
+
+<div th:replace="~{fragments/layout :: app_shell(~{::#dashboardContent})}">
+    <div id="dashboardContent">
+        
+        <!-- Welcome Salon Banner -->
+        <div class="welcome-banner">
+            <span class="banner-badge"><i class="bi bi-sparkles me-1"></i> Salon Command Center</span>
+            <h3>Welcome back, Mahalakshmi!</h3>
+            <p>Your <strong>Downtown Flagship Lounge</strong> is currently operating at <strong>84% booking capacity</strong> today. 6 clients are currently in-service across styling chairs and facial suites.</p>
+        </div>
+
+        <!-- KPI Cards Row -->
+        <div class="row g-4 mb-4">
+            <!-- 1. Today's Sales -->
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="kpi-card">
+                    <div class="kpi-top">
+                        <span class="kpi-label">Today's Sales</span>
+                        <div class="kpi-icon-wrap icon-sales">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value" th:text="${metrics.todaySales}">$3,450.00</div>
+                    <div class="kpi-trend trend-up">
+                        <i class="bi bi-arrow-up-right"></i>
+                        <span th:text="${metrics.salesGrowth}">+14.8% vs yesterday</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Active Customers -->
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="kpi-card">
+                    <div class="kpi-top">
+                        <span class="kpi-label">Active Customers</span>
+                        <div class="kpi-icon-wrap icon-customers">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value" th:text="${metrics.activeCustomers}">48</div>
+                    <div class="kpi-trend trend-up">
+                        <i class="bi bi-person-plus-fill"></i>
+                        <span th:text="${metrics.customerGrowth}">+8 new clients today</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Appointments Today -->
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="kpi-card">
+                    <div class="kpi-top">
+                        <span class="kpi-label">Appointments Today</span>
+                        <div class="kpi-icon-wrap icon-appointments">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value" th:text="${metrics.todayAppointments}">34</div>
+                    <div class="kpi-trend trend-neutral">
+                        <i class="bi bi-clock-history"></i>
+                        <span th:text="${metrics.appointmentNote}">6 in-chair, 4 upcoming</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. On-Duty Employees -->
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="kpi-card">
+                    <div class="kpi-top">
+                        <span class="kpi-label">Staff On-Duty</span>
+                        <div class="kpi-icon-wrap icon-employees">
+                            <i class="bi bi-person-badge-fill"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-value">
+                        <span th:text="${metrics.onDutyEmployees}">12</span>
+                        <span class="fs-6 text-muted fw-normal" th:text="'/ ' + ${metrics.totalEmployees}">/ 14</span>
+                    </div>
+                    <div class="kpi-trend trend-up">
+                        <i class="bi bi-check2-circle"></i>
+                        <span>All key stations manned</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row g-4 mb-4">
+            <!-- Revenue & Service Category Chart -->
+            <div class="col-12 col-lg-8">
+                <div class="salon-card h-100 mb-0">
+                    <div class="salon-card-header">
+                        <h5 class="salon-card-title">
+                            <i class="bi bi-graph-up text-primary"></i> Weekly Revenue Trends & Category Split
+                        </h5>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-secondary active">7 Days</button>
+                            <button type="button" class="btn btn-outline-secondary">30 Days</button>
+                        </div>
+                    </div>
+                    <div class="salon-card-body">
+                        <div style="height: 280px; position: relative;">
+                            <canvas id="revenueTrendsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointment Status Doughnut Chart -->
+            <div class="col-12 col-lg-4">
+                <div class="salon-card h-100 mb-0">
+                    <div class="salon-card-header">
+                        <h5 class="salon-card-title">
+                            <i class="bi bi-pie-chart text-info"></i> Today's Schedule Status
+                        </h5>
+                        <span class="badge bg-light text-dark border">34 Slots</span>
+                    </div>
+                    <div class="salon-card-body">
+                        <div style="height: 240px; position: relative;">
+                            <canvas id="appointmentStatusChart"></canvas>
+                        </div>
+                        <div class="d-flex justify-content-between text-center pt-3 border-top mt-2">
+                            <div>
+                                <small class="text-muted d-block">Completed</small>
+                                <strong class="text-success fs-6">18</strong>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">In-Chair</small>
+                                <strong class="text-warning fs-6">6</strong>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">Confirmed</small>
+                                <strong class="text-primary fs-6">6</strong>
+                            </div>
+                            <div>
+                                <small class="text-muted d-block">Waiting</small>
+                                <strong class="text-secondary fs-6">4</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Row: Live Queue & Top Stylists -->
+        <div class="row g-4 mb-4">
+            <!-- Real-Time Live Appointments Queue -->
+            <div class="col-12 col-xl-8">
+                <div class="salon-card mb-0">
+                    <div class="salon-card-header">
+                        <h5 class="salon-card-title">
+                            <i class="bi bi-clock-fill text-warning"></i> Real-Time Salon Queue & Bookings
+                        </h5>
+                        <div class="d-flex gap-2">
+                            <a th:href="@{/appointments}" class="btn btn-sm btn-salon-outline">
+                                View Full Calendar <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="salon-card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table salon-table">
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Guest Client</th>
+                                        <th>Service</th>
+                                        <th>Specialist</th>
+                                        <th>Time Slot</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="apt : ${appointments}">
+                                        <td>
+                                            <span class="badge bg-dark-subtle text-dark fw-bold font-monospace" th:text="${apt.id}">APT-1092</span>
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold text-dark" th:text="${apt.customerName}">Sophia Turner</div>
+                                            <div class="text-muted small" th:text="${apt.customerPhone}">+1 (555) 234-8901</div>
+                                        </td>
+                                        <td th:text="${apt.serviceName}">Hydra-Glow Facial</td>
+                                        <td>
+                                            <i class="bi bi-person-circle text-primary me-1"></i>
+                                            <span th:text="${apt.stylistName}">Priya Sharma</span>
+                                        </td>
+                                        <td class="fw-semibold" th:text="${apt.timeSlot}">10:30 AM</td>
+                                        <td>
+                                            <span class="badge-status" 
+                                                  th:classappend="${apt.status == 'In-Chair' ? 'badge-in-chair' : 
+                                                                   (apt.status == 'Waiting' ? 'badge-waiting' : 
+                                                                   (apt.status == 'Confirmed' ? 'badge-confirmed' : 'badge-completed'))}">
+                                                <i class="bi bi-dot"></i>
+                                                <span th:text="${apt.status}">Confirmed</span>
+                                            </span>
+                                        </td>
+                                        <td class="fw-bold text-dark" th:text="'$' + ${#numbers.formatDecimal(apt.amount, 1, 2)}">$145.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Performing Specialists -->
+            <div class="col-12 col-xl-4">
+                <div class="salon-card mb-0">
+                    <div class="salon-card-header">
+                        <h5 class="salon-card-title">
+                            <i class="bi bi-star-fill text-warning"></i> Top Stylists & Specialists
+                        </h5>
+                        <a th:href="@{/employees}" class="small text-decoration-none fw-semibold text-primary">All Staff</a>
+                    </div>
+                    <div class="salon-card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item p-3 d-flex align-items-center justify-content-between" th:each="emp, iterStat : ${employees}" th:if="${iterStat.index < 4}">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 42px; height: 42px;">
+                                        <span th:text="${#strings.substring(emp.name, 0, 1)}">P</span>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark" th:text="${emp.name}">Priya Sharma</div>
+                                        <div class="text-muted small" th:text="${emp.role}">Lead Esthetician</div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-warning-subtle text-dark border border-warning-subtle">
+                                        <i class="bi bi-star-fill text-warning"></i> <span th:text="${emp.rating}">4.95</span>
+                                    </span>
+                                    <div class="small text-muted mt-1" th:text="${emp.totalSalesRevenue}">$14,850</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Invoices Row -->
+        <div class="salon-card">
+            <div class="salon-card-header">
+                <h5 class="salon-card-title">
+                    <i class="bi bi-receipt text-success"></i> Recent Terminal Invoices & POS Transactions
+                </h5>
+                <a th:href="@{/billing}" class="btn btn-sm btn-salon-primary">
+                    <i class="bi bi-plus-lg me-1"></i> New Sale
+                </a>
+            </div>
+            <div class="salon-card-body p-0">
+                <div class="table-responsive">
+                    <table class="table salon-table">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Client Name</th>
+                                <th>Services Rendered</th>
+                                <th>Timestamp</th>
+                                <th>Payment Channel</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="inv : ${recentInvoices}">
+                                <td class="fw-bold font-monospace text-primary" th:text="${inv.invoiceNumber}">INV-2026-081</td>
+                                <td class="fw-semibold text-dark" th:text="${inv.customerName}">Sophia Turner</td>
+                                <td class="text-muted" th:text="${inv.services}">Hydra Facial, Nail Art</td>
+                                <td th:text="${inv.date}">05 Nov, 11:45 AM</td>
+                                <td>
+                                    <span class="badge bg-light text-dark border" th:text="${inv.paymentMethod}">Credit Card</span>
+                                </td>
+                                <td class="fw-bold text-dark" th:text="'$' + ${#numbers.formatDecimal(inv.totalAmount, 1, 2)}">$240.00</td>
+                                <td>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Paid
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+
