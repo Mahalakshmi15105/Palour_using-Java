@@ -28,3 +28,4 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.sendRedirect(request.getContextPath() + "/dashboard?accessDenied=true");
     }
 }
+

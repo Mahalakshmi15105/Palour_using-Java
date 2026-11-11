@@ -13,4 +13,7 @@ public interface AppointmentEntityRepository extends JpaRepository<AppointmentEn
     Optional<AppointmentEntity> findByAppointmentNumber(String appointmentNumber);
     List<AppointmentEntity> findByAppointmentDate(LocalDate appointmentDate);
     List<AppointmentEntity> findByStatus(String status);
+    List<AppointmentEntity> findByCustomerIdOrderByAppointmentDateDescStartTimeDesc(Long customerId);
+    long countByCustomerId(Long customerId);
+    long countByCustomerIdAndStatus(Long customerId, String status);
 }

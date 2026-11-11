@@ -41,6 +41,18 @@ public class CustomerEntity {
     @Column(length = 50)
     private String spot;
 
+    @Column(name = "anniversary_date")
+    private LocalDate anniversaryDate;
+
+    @Column(length = 80)
+    private String city;
+
+    @Column(length = 30)
+    private String status = "Active"; // "Active", "Inactive"
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean deleted = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
@@ -81,6 +93,42 @@ public class CustomerEntity {
     public String getSpot() { return spot; }
     public void setSpot(String spot) { this.spot = spot; }
 
+    public LocalDate getAnniversaryDate() { return anniversaryDate; }
+    public void setAnniversaryDate(LocalDate anniversaryDate) { this.anniversaryDate = anniversaryDate; }
+
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+
+    public String getStatus() { return status != null ? status : "Active"; }
+    public void setStatus(String status) { this.status = status; }
+
+    public boolean isDeleted() { return deleted; }
+    public void setDeleted(boolean deleted) { this.deleted = deleted; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public String getFullName() {
+        if (lastName == null || lastName.trim().isEmpty()) {
+            return firstName != null ? firstName : "";
+        }
+        return firstName + " " + lastName;
+    }
+
+    public void setFullName(String fullName) {
+        if (fullName == null || fullName.trim().isEmpty()) {
+            this.firstName = "";
+            this.lastName = "";
+            return;
+        }
+        String trimmed = fullName.trim();
+        int lastSpace = trimmed.lastIndexOf(' ');
+        if (lastSpace > 0) {
+            this.firstName = trimmed.substring(0, lastSpace).trim();
+            this.lastName = trimmed.substring(lastSpace + 1).trim();
+        } else {
+            this.firstName = trimmed;
+            this.lastName = "";
+        }
+    }
 }

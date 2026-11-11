@@ -53,7 +53,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                         master.getPasswordHash(),
                         master.getFullName(),
                         UserRole.SUPER_ADMIN,
-                        "parlour_java_master",
+                        TenantContext.DEFAULT_TENANT,
                         null,
                         null,
                         isActive
@@ -112,3 +112,4 @@ public class CustomUserDetailsService implements UserDetailsService {
         throw new UsernameNotFoundException("No account found with email: " + email);
     }
 }
+

@@ -34,3 +34,4 @@ public enum UserRole {
         return EMPLOYEE;
     }
 }
+

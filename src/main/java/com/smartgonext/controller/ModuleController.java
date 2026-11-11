@@ -26,13 +26,6 @@ public class ModuleController {
         return "billing";
     }
 
-    @GetMapping("/customers")
-    public String customers(Model model) {
-        model.addAttribute("activeModule", "customers");
-        model.addAttribute("pageTitle", "Client Relationship Management (CRM)");
-        model.addAttribute("customers", dataService.getCustomers());
-        return "customers";
-    }
 
     @GetMapping("/employees")
     public String employees(Model model) {
