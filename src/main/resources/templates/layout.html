@@ -259,7 +259,7 @@
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-2" aria-labelledby="userMenuDropdown">
                         <li class="px-3 py-2 border-bottom">
                             <div class="fw-bold text-dark" th:text="${session.LOGGED_IN_USER_NAME != null ? session.LOGGED_IN_USER_NAME : 'Mahalakshmi'}">Mahalakshmi</div>
-                            <div class="small text-muted" th:text="${session.LOGGED_IN_USER_EMAIL != null ? session.LOGGED_IN_USER_EMAIL : 'admin@smartgonext.com'}">admin@smartgonext.com</div>
+                            <div class="small text-muted" th:text="${session.LOGGED_IN_USER_EMAIL != null ? session.LOGGED_IN_USER_EMAIL : 'admin@123.com'}">admin@123.com</div>
                             <span class="badge bg-purple-subtle text-primary border mt-1" th:text="${session.LOGGED_IN_USER_ROLE_DISPLAY != null ? session.LOGGED_IN_USER_ROLE_DISPLAY : (session.LOGGED_IN_USER_ROLE != null ? session.LOGGED_IN_USER_ROLE : 'User')}">Super Administrator</span>
                         </li>
                         <li th:if="${session.LOGGED_IN_USER_ROLE == 'SUPER_ADMIN' or session.LOGGED_IN_USER_ROLE == 'PARLOUR_ADMIN'}">

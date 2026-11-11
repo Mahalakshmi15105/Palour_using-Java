@@ -53,19 +53,19 @@ public class MasterDataSeeder implements CommandLineRunner {
     }
 
     private void seedSuperAdmin() {
-        Optional<MasterUser> existingOpt = masterUserRepository.findByEmail("superadmin@smartgonext.com");
+        String email = "superadmin@123.com";
+        Optional<MasterUser> existingOpt = masterUserRepository.findByEmail(email);
         if (existingOpt.isPresent()) {
             MasterUser existing = existingOpt.get();
-            // Ensure BCrypt hashed password
             if (!existing.getPasswordHash().startsWith("$2a$") && !existing.getPasswordHash().startsWith("$2b$")) {
-                existing.setPasswordHash(passwordEncoder.encode(existing.getPasswordHash()));
+                existing.setPasswordHash(passwordEncoder.encode("admin123"));
                 masterUserRepository.save(existing);
             }
         } else {
             masterUserRepository.save(new MasterUser(
-                    "superadmin@smartgonext.com",
+                    email,
                     passwordEncoder.encode("admin123"),
-                    "SaaS Platform Administrator",
+                    "Platform Administrator",
                     UserRole.SUPER_ADMIN.name(),
                     "ACTIVE"
             ));
@@ -77,7 +77,7 @@ public class MasterDataSeeder implements CommandLineRunner {
             SubscriptionPlan proPlan = planRepository.findByName("Pro Salon Tier").orElse(null);
             Tenant defaultTenant = new Tenant(
                     "Downtown Flagship Lounge",
-                    "admin@smartgonext.com",
+                    "admin@123.com",
                     "+1 (555) 789-2233",
                     proPlan,
                     LocalDate.now().plusYears(1),
@@ -90,15 +90,14 @@ public class MasterDataSeeder implements CommandLineRunner {
     }
 
     private void seedTenantLookups() {
-        Tenant defaultTenant = tenantRepository.findByEmail("admin@smartgonext.com").orElse(null);
+        Tenant defaultTenant = tenantRepository.findByEmail("admin@123.com").orElse(null);
         if (defaultTenant == null && tenantRepository.count() > 0) {
             defaultTenant = tenantRepository.findAll().get(0);
         }
         if (defaultTenant != null) {
-            syncLookup("admin@smartgonext.com", defaultTenant, "parlour_java", UserRole.PARLOUR_ADMIN.name());
-            syncLookup("priya.sharma@smartgonext.com", defaultTenant, "parlour_java", UserRole.BRANCH_ADMIN.name());
-            syncLookup("employee@smartgonext.com", defaultTenant, "parlour_java", UserRole.EMPLOYEE.name());
-            syncLookup("reception@smartgonext.com", defaultTenant, "parlour_java", UserRole.EMPLOYEE.name());
+            syncLookup("admin@123.com", defaultTenant, "parlour_java", UserRole.PARLOUR_ADMIN.name());
+            syncLookup("branchadmin@123.com", defaultTenant, "parlour_java", UserRole.BRANCH_ADMIN.name());
+            syncLookup("employee@123.com", defaultTenant, "parlour_java", UserRole.EMPLOYEE.name());
         }
     }
 
@@ -122,12 +121,16 @@ public class MasterDataSeeder implements CommandLineRunner {
     private void seedPlatformSettings() {
         if (settingRepository.count() == 0) {
             settingRepository.save(new PlatformSetting("PLATFORM_NAME", "Parlour using java", "Global application name"));
-            settingRepository.save(new PlatformSetting("SUPPORT_EMAIL", "support@parlour.com", "Master platform support desk"));
+            settingRepository.save(new PlatformSetting("SUPPORT_EMAIL", "support@123.com", "Master platform support desk"));
             settingRepository.save(new PlatformSetting("DEFAULT_CURRENCY", "USD", "Default currency symbol code"));
             settingRepository.save(new PlatformSetting("MAINTENANCE_MODE", "false", "Global maintenance lock"));
         } else {
             settingRepository.findBySettingKey("PLATFORM_NAME").ifPresent(setting -> {
                 setting.setSettingValue("Parlour using java");
+                settingRepository.save(setting);
+            });
+            settingRepository.findBySettingKey("SUPPORT_EMAIL").ifPresent(setting -> {
+                setting.setSettingValue("support@123.com");
                 settingRepository.save(setting);
             });
         }

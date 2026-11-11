@@ -44,7 +44,7 @@ public class TenantSecurityDataSeeder implements CommandLineRunner {
 
             // 1. Parlour Admin
             updateOrCreateUser(
-                    "admin@smartgonext.com",
+                    "admin@123.com",
                     "Mahalakshmi",
                     "admin123",
                     UserRole.PARLOUR_ADMIN,
@@ -53,25 +53,16 @@ public class TenantSecurityDataSeeder implements CommandLineRunner {
 
             // 2. Branch Admin
             updateOrCreateUser(
-                    "priya.sharma@smartgonext.com",
+                    "branchadmin@123.com",
                     "Priya Sharma",
                     "staff123",
                     UserRole.BRANCH_ADMIN,
                     defaultBranch
             );
 
-            // 3. Employee (update legacy reception account to EMPLOYEE role)
+            // 3. Employee
             updateOrCreateUser(
-                    "reception@smartgonext.com",
-                    "Front Desk Reception",
-                    "staff123",
-                    UserRole.EMPLOYEE,
-                    defaultBranch
-            );
-
-            // 4. Dedicated Staff Employee account
-            updateOrCreateUser(
-                    "employee@smartgonext.com",
+                    "employee@123.com",
                     "Ananya Verma",
                     "staff123",
                     UserRole.EMPLOYEE,
@@ -97,13 +88,11 @@ public class TenantSecurityDataSeeder implements CommandLineRunner {
             TenantUser user = userOpt.get();
             boolean changed = false;
 
-            // Upgrade role if needed
             if (!role.name().equalsIgnoreCase(user.getRole())) {
                 user.setRole(role.name());
                 changed = true;
             }
 
-            // Upgrade plain-text password to BCrypt
             if (user.getPasswordHash() == null ||
                 (!user.getPasswordHash().startsWith("$2a$") && !user.getPasswordHash().startsWith("$2b$"))) {
                 user.setPasswordHash(passwordEncoder.encode(rawPassword));
