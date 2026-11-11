@@ -28,3 +28,4 @@ public class CustomerStatsDto {
     public long getReturningCustomers() { return returningCustomers; }
     public void setReturningCustomers(long returningCustomers) { this.returningCustomers = returningCustomers; }
 }
+

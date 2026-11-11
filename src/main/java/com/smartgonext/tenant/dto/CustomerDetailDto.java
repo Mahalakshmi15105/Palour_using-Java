@@ -69,3 +69,4 @@ public class CustomerDetailDto {
     public List<CustomerMembershipEntity> getMemberships() { return memberships; }
     public void setMemberships(List<CustomerMembershipEntity> memberships) { this.memberships = memberships; }
 }
+
