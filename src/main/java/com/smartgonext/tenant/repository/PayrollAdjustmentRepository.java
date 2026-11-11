@@ -12,3 +12,4 @@ public interface PayrollAdjustmentRepository extends JpaRepository<PayrollAdjust
     List<PayrollAdjustment> findByEmployeeId(Long employeeId);
     List<PayrollAdjustment> findByDate(LocalDate date);
 }
+

@@ -13,3 +13,4 @@ public interface ReminderRepository extends JpaRepository<Reminder, Long> {
     List<Reminder> findByReminderDate(LocalDate reminderDate);
     List<Reminder> findByStatus(String status);
 }
+

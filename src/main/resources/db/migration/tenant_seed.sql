@@ -63,3 +63,4 @@ INSERT IGNORE INTO membership_plans (id, name, price, validity_months, service_d
 (1, 'Silver Elite', 149.00, 6, 10.00, 5.00, '10% off services and priority booking', 'Active'),
 (2, 'Gold Club', 299.00, 12, 15.00, 10.00, '15% off all services, 2 free facials', 'Active'),
 (3, 'Platinum VIP', 499.00, 12, 20.00, 15.00, '20% off all services, private VIP suite', 'Active');
+

@@ -12,3 +12,4 @@ public interface StockReorderLogRepository extends JpaRepository<StockReorderLog
     List<StockReorderLog> findBySupplierId(Long supplierId);
     List<StockReorderLog> findByStatus(String status);
 }
+

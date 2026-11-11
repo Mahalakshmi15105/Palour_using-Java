@@ -10,3 +10,4 @@ import java.util.List;
 public interface MembershipPlanServiceEntityRepository extends JpaRepository<MembershipPlanServiceEntity, Long> {
     List<MembershipPlanServiceEntity> findByMembershipPlanId(Long membershipPlanId);
 }
+

@@ -11,3 +11,4 @@ import java.util.Optional;
 public interface CashDenominationRepository extends JpaRepository<CashDenomination, Long> {
     Optional<CashDenomination> findByBranchIdAndDate(Long branchId, LocalDate date);
 }
+

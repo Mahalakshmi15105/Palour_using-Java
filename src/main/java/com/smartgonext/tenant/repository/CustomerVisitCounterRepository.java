@@ -10,3 +10,4 @@ import java.util.Optional;
 public interface CustomerVisitCounterRepository extends JpaRepository<CustomerVisitCounter, Long> {
     Optional<CustomerVisitCounter> findByCustomerId(Long customerId);
 }
+

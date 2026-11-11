@@ -17,7 +17,11 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(@org.springframework.web.bind.annotation.RequestParam(value = "accessDenied", required = false) String accessDenied,
+                            Model model) {
+        if (accessDenied != null) {
+            model.addAttribute("accessDeniedError", "Access Restricted: Your role does not have authorization to view the requested module.");
+        }
         model.addAttribute("activeModule", "dashboard");
         model.addAttribute("pageTitle", "Salon Performance & Command Center");
         model.addAttribute("metrics", dataService.getDashboardMetrics());

@@ -10,3 +10,4 @@ import java.util.List;
 public interface AppointmentItemEntityRepository extends JpaRepository<AppointmentItemEntity, Long> {
     List<AppointmentItemEntity> findByAppointmentId(Long appointmentId);
 }
+

@@ -10,3 +10,4 @@ import java.util.List;
 public interface InvoiceLineItemEntityRepository extends JpaRepository<InvoiceLineItemEntity, Long> {
     List<InvoiceLineItemEntity> findByInvoiceId(Long invoiceId);
 }
+

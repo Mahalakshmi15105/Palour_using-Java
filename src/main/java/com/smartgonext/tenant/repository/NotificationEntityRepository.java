@@ -11,3 +11,4 @@ public interface NotificationEntityRepository extends JpaRepository<Notification
     List<NotificationEntity> findByIsRead(Boolean isRead);
     List<NotificationEntity> findByCategory(String category);
 }
+

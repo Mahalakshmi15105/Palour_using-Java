@@ -96,3 +96,4 @@ public class TenantDataSourceConfig {
         return new JpaTransactionManager(tenantEntityManagerFactory);
     }
 }
+

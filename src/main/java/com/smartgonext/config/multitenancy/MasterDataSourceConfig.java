@@ -77,3 +77,4 @@ public class MasterDataSourceConfig {
         return new JpaTransactionManager(masterEntityManagerFactory);
     }
 }
+

@@ -11,3 +11,4 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
     List<AuditLog> findByUserId(Long userId);
     List<AuditLog> findByResourceName(String resourceName);
 }
+

@@ -10,3 +10,4 @@ import java.util.List;
 public interface InvoicePaymentEntityRepository extends JpaRepository<InvoicePaymentEntity, Long> {
     List<InvoicePaymentEntity> findByInvoiceId(Long invoiceId);
 }
+

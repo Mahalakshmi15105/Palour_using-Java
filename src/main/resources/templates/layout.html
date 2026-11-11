@@ -3,7 +3,7 @@
 <head th:fragment="html_head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title} + ' | SmartGoNext Salon SaaS'">SmartGoNext Salon SaaS</title>
+    <title th:text="${title} + ' | Parlour using java'">Parlour using java</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" th:href="@{/images/favicon.svg}">
@@ -39,8 +39,8 @@
                     <i class="bi bi-gem"></i>
                 </div>
                 <div class="brand-text">
-                    <h4>SmartGoNext <span class="saas-badge">SaaS</span></h4>
-                    <p>Salon & Beauty ERP</p>
+                    <h4>Parlour <span class="saas-badge">Java</span></h4>
+                    <p>Beauty Parlour & Salon</p>
                 </div>
             </a>
         </div>
@@ -50,22 +50,22 @@
             <!-- CORE OPERATIONS -->
             <p class="nav-section-title">Core Operations</p>
             <ul class="sidebar-nav">
-                <!-- 1. Dashboard -->
+                <!-- 1. Dashboard (All Roles) -->
                 <li class="sidebar-nav-item">
                     <a th:href="@{/dashboard}" class="sidebar-nav-link" th:classappend="${activeModule == 'dashboard'} ? 'active' : ''">
                         <i class="bi bi-grid-1x2-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <!-- 2. Billing (POS) -->
-                <li class="sidebar-nav-item">
+                <!-- 2. Billing (POS) - SuperAdmin, ParlourAdmin, BranchAdmin -->
+                <li class="sidebar-nav-item" th:if="${session.LOGGED_IN_USER_ROLE != 'EMPLOYEE'}">
                     <a th:href="@{/billing}" class="sidebar-nav-link" th:classappend="${activeModule == 'billing'} ? 'active' : ''">
                         <i class="bi bi-receipt-cutoff"></i>
                         <span>Billing (POS)</span>
                         <span class="sidebar-badge bg-danger text-white">Live</span>
                     </a>
                 </li>
-                <!-- 3. Appointments -->
+                <!-- 3. Appointments (All Roles) -->
                 <li class="sidebar-nav-item">
                     <a th:href="@{/appointments}" class="sidebar-nav-link" th:classappend="${activeModule == 'appointments'} ? 'active' : ''">
                         <i class="bi bi-calendar2-week-fill"></i>
@@ -73,7 +73,7 @@
                         <span class="sidebar-badge bg-primary text-white">34</span>
                     </a>
                 </li>
-                <!-- 4. Customers -->
+                <!-- 4. Customers (All Roles) -->
                 <li class="sidebar-nav-item">
                     <a th:href="@{/customers}" class="sidebar-nav-link" th:classappend="${activeModule == 'customers'} ? 'active' : ''">
                         <i class="bi bi-people-fill"></i>
@@ -85,29 +85,29 @@
             <!-- STAFF & OPERATIONS -->
             <p class="nav-section-title mt-3">Staff & Catalog</p>
             <ul class="sidebar-nav">
-                <!-- 5. Employees -->
-                <li class="sidebar-nav-item">
+                <!-- 5. Employees - SuperAdmin, ParlourAdmin, BranchAdmin -->
+                <li class="sidebar-nav-item" th:if="${session.LOGGED_IN_USER_ROLE != 'EMPLOYEE'}">
                     <a th:href="@{/employees}" class="sidebar-nav-link" th:classappend="${activeModule == 'employees'} ? 'active' : ''">
                         <i class="bi bi-person-badge-fill"></i>
                         <span>Employees</span>
                     </a>
                 </li>
-                <!-- 6. Attendance -->
+                <!-- 6. Attendance (All Roles) -->
                 <li class="sidebar-nav-item">
                     <a th:href="@{/attendance}" class="sidebar-nav-link" th:classappend="${activeModule == 'attendance'} ? 'active' : ''">
                         <i class="bi bi-clock-history"></i>
                         <span>Attendance</span>
                     </a>
                 </li>
-                <!-- 7. Services & Products -->
+                <!-- 7. Services & Products (All Roles) -->
                 <li class="sidebar-nav-item">
                     <a th:href="@{/services}" class="sidebar-nav-link" th:classappend="${activeModule == 'services'} ? 'active' : ''">
                         <i class="bi bi-scissors"></i>
                         <span>Services & Products</span>
                     </a>
                 </li>
-                <!-- 8. Membership -->
-                <li class="sidebar-nav-item">
+                <!-- 8. Membership - SuperAdmin, ParlourAdmin, BranchAdmin -->
+                <li class="sidebar-nav-item" th:if="${session.LOGGED_IN_USER_ROLE != 'EMPLOYEE'}">
                     <a th:href="@{/membership}" class="sidebar-nav-link" th:classappend="${activeModule == 'membership'} ? 'active' : ''">
                         <i class="bi bi-award-fill"></i>
                         <span>Membership</span>
@@ -116,10 +116,10 @@
                 </li>
             </ul>
 
-            <!-- MARKETING & BUSINESS -->
-            <p class="nav-section-title mt-3">Growth & Automation</p>
-            <ul class="sidebar-nav">
-                <!-- 9. Notifications -->
+            <!-- MARKETING & BUSINESS (SuperAdmin & ParlourAdmin only) -->
+            <p class="nav-section-title mt-3" th:if="${session.LOGGED_IN_USER_ROLE == 'SUPER_ADMIN' or session.LOGGED_IN_USER_ROLE == 'PARLOUR_ADMIN'}">Growth & Automation</p>
+            <ul class="sidebar-nav" th:if="${session.LOGGED_IN_USER_ROLE == 'SUPER_ADMIN' or session.LOGGED_IN_USER_ROLE == 'PARLOUR_ADMIN'}">
+                <!-- 9. Notifications (All Roles) -->
                 <li class="sidebar-nav-item">
                     <a th:href="@{/notifications}" class="sidebar-nav-link" th:classappend="${activeModule == 'notifications'} ? 'active' : ''">
                         <i class="bi bi-bell-fill"></i>
@@ -155,11 +155,11 @@
         <div class="sidebar-footer">
             <div class="pro-card">
                 <div class="pro-card-icon">
-                    <i class="bi bi-stars"></i>
+                    <i class="bi bi-shield-check text-warning"></i>
                 </div>
                 <div class="pro-card-content">
-                    <h6>Enterprise Multi-Salon</h6>
-                    <p>Downtown & 2 branches active</p>
+                    <h6 th:text="${session.LOGGED_IN_USER_ROLE_DISPLAY != null ? session.LOGGED_IN_USER_ROLE_DISPLAY : 'Salon User'}">Enterprise Multi-Salon</h6>
+                    <p th:text="${session.LOGGED_IN_BRANCH_NAME != null ? session.LOGGED_IN_BRANCH_NAME : 'Downtown Flagship'}">Downtown & 2 branches active</p>
                 </div>
             </div>
         </div>
@@ -181,15 +181,15 @@
                 <div class="dropdown">
                     <a href="#" class="branch-dropdown-toggle dropdown-toggle" id="branchDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="branch-dot"></span>
-                        <span id="currentBranchName">Downtown Flagship Lounge</span>
+                        <span id="currentBranchName" th:text="${session.LOGGED_IN_BRANCH_NAME != null ? session.LOGGED_IN_BRANCH_NAME : 'Downtown Flagship Lounge'}">Downtown Flagship Lounge</span>
                     </a>
                     <ul class="dropdown-menu shadow-sm border-0 py-2" aria-labelledby="branchDropdown">
-                        <li><h6 class="dropdown-header text-uppercase fs-6">Select Salon Branch</h6></li>
+                        <li><h6 class="dropdown-header text-uppercase fs-6">Salon Branch</h6></li>
                         <li><a class="dropdown-item branch-option py-2 d-flex align-items-center gap-2" href="#" data-branch="Downtown Flagship Lounge"><i class="bi bi-building-check text-primary"></i> Downtown Flagship Lounge</a></li>
                         <li><a class="dropdown-item branch-option py-2 d-flex align-items-center gap-2" href="#" data-branch="Beverly Hills Luxury Spa"><i class="bi bi-building text-secondary"></i> Beverly Hills Luxury Spa</a></li>
                         <li><a class="dropdown-item branch-option py-2 d-flex align-items-center gap-2" href="#" data-branch="Uptown Express Studio"><i class="bi bi-building text-secondary"></i> Uptown Express Studio</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-1 text-primary small fw-semibold" th:href="@{/settings}"><i class="bi bi-plus-circle me-1"></i> Add New Branch</a></li>
+                        <li th:if="${session.LOGGED_IN_USER_ROLE == 'SUPER_ADMIN' or session.LOGGED_IN_USER_ROLE == 'PARLOUR_ADMIN'}"><hr class="dropdown-divider"></li>
+                        <li th:if="${session.LOGGED_IN_USER_ROLE == 'SUPER_ADMIN' or session.LOGGED_IN_USER_ROLE == 'PARLOUR_ADMIN'}"><a class="dropdown-item py-1 text-primary small fw-semibold" th:href="@{/settings}"><i class="bi bi-plus-circle me-1"></i> Add New Branch</a></li>
                     </ul>
                 </div>
 
@@ -202,8 +202,8 @@
 
             <!-- Right: Quick Actions & Profile -->
             <div class="topbar-right">
-                <!-- Quick POS Button -->
-                <a th:href="@{/billing}" class="btn btn-sm btn-salon-primary d-none d-sm-inline-flex">
+                <!-- Quick POS Button (Admins only) -->
+                <a th:href="@{/billing}" class="btn btn-sm btn-salon-primary d-none d-sm-inline-flex" th:if="${session.LOGGED_IN_USER_ROLE != 'EMPLOYEE'}">
                     <i class="bi bi-receipt"></i> Quick POS
                 </a>
 
@@ -250,27 +250,48 @@
                 <!-- User Profile Dropdown -->
                 <div class="dropdown">
                     <a href="#" class="profile-pill dropdown-toggle" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="profile-avatar">M</div>
+                        <div class="profile-avatar" th:text="${session.LOGGED_IN_USER_NAME != null and #strings.length(session.LOGGED_IN_USER_NAME) > 0 ? #strings.substring(session.LOGGED_IN_USER_NAME, 0, 1) : 'U'}">M</div>
                         <div class="profile-info d-none d-lg-block">
-                            <p class="profile-name">Mahalakshmi</p>
-                            <p class="profile-role">Salon Owner / Admin</p>
+                            <p class="profile-name" th:text="${session.LOGGED_IN_USER_NAME != null ? session.LOGGED_IN_USER_NAME : 'Mahalakshmi'}">Mahalakshmi</p>
+                            <p class="profile-role" th:text="${session.LOGGED_IN_USER_ROLE_DISPLAY != null ? session.LOGGED_IN_USER_ROLE_DISPLAY : 'Salon User'}">Salon Owner / Admin</p>
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 py-2" aria-labelledby="userMenuDropdown">
                         <li class="px-3 py-2 border-bottom">
-                            <div class="fw-bold text-dark">Mahalakshmi</div>
-                            <div class="small text-muted">admin@smartgonext.com</div>
-                            <span class="badge bg-purple-subtle text-primary border mt-1">Super Administrator</span>
+                            <div class="fw-bold text-dark" th:text="${session.LOGGED_IN_USER_NAME != null ? session.LOGGED_IN_USER_NAME : 'Mahalakshmi'}">Mahalakshmi</div>
+                            <div class="small text-muted" th:text="${session.LOGGED_IN_USER_EMAIL != null ? session.LOGGED_IN_USER_EMAIL : 'admin@smartgonext.com'}">admin@smartgonext.com</div>
+                            <span class="badge bg-purple-subtle text-primary border mt-1" th:text="${session.LOGGED_IN_USER_ROLE_DISPLAY != null ? session.LOGGED_IN_USER_ROLE_DISPLAY : (session.LOGGED_IN_USER_ROLE != null ? session.LOGGED_IN_USER_ROLE : 'User')}">Super Administrator</span>
                         </li>
-                        <li><a class="dropdown-item py-2" th:href="@{/settings}"><i class="bi bi-person-gear me-2"></i> Salon Profile & Tax</a></li>
-                        <li><a class="dropdown-item py-2" th:href="@{/reports}"><i class="bi bi-wallet2 me-2"></i> P&L & Revenue</a></li>
-                        <li><a class="dropdown-item py-2" th:href="@{/settings}"><i class="bi bi-sliders me-2"></i> System Settings</a></li>
+                        <li th:if="${session.LOGGED_IN_USER_ROLE == 'SUPER_ADMIN' or session.LOGGED_IN_USER_ROLE == 'PARLOUR_ADMIN'}">
+                            <a class="dropdown-item py-2" th:href="@{/settings}"><i class="bi bi-person-gear me-2"></i> Salon Profile & Tax</a>
+                        </li>
+                        <li th:if="${session.LOGGED_IN_USER_ROLE == 'SUPER_ADMIN' or session.LOGGED_IN_USER_ROLE == 'PARLOUR_ADMIN'}">
+                            <a class="dropdown-item py-2" th:href="@{/reports}"><i class="bi bi-wallet2 me-2"></i> P&L & Revenue</a>
+                        </li>
+                        <li th:if="${session.LOGGED_IN_USER_ROLE == 'SUPER_ADMIN' or session.LOGGED_IN_USER_ROLE == 'PARLOUR_ADMIN'}">
+                            <a class="dropdown-item py-2" th:href="@{/settings}"><i class="bi bi-sliders me-2"></i> System Settings</a>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-2 text-danger fw-semibold" th:href="@{/logout}"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" id="logoutForm" class="d-none">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" th:if="${_csrf}" />
+                            </form>
+                            <a class="dropdown-item py-2 text-danger fw-semibold" href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();">
+                                <i class="bi bi-box-arrow-right me-2"></i> Sign Out
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </header>
+
+        <!-- Access Denied Banner if user was redirected -->
+        <div th:if="${param.accessDenied != null or accessDeniedError != null}" class="alert alert-danger mx-4 mt-3 mb-0 d-flex align-items-center gap-2 rounded-3 shadow-sm border-0">
+            <i class="bi bi-shield-slash-fill fs-5 text-danger"></i>
+            <div>
+                <strong>Access Restricted:</strong> Your role (<span class="badge bg-danger text-white" th:text="${session.LOGGED_IN_USER_ROLE_DISPLAY != null ? session.LOGGED_IN_USER_ROLE_DISPLAY : (session.LOGGED_IN_USER_ROLE != null ? session.LOGGED_IN_USER_ROLE : 'Current Role')}">Role</span>) does not have authorization to view that module.
+            </div>
+        </div>
 
         <!-- PAGE CONTENT CONTAINER -->
         <main class="page-content">
@@ -282,10 +303,10 @@
         <!-- FOOTER -->
         <footer class="app-footer">
             <div>
-                &copy; 2026 <strong>SmartGoNext</strong> – Luxury Salon & Beauty Parlour SaaS. All rights reserved.
+                &copy; 2026 <strong>Parlour using java</strong> – Multi-Tenant Salon Management System. All rights reserved.
             </div>
             <div class="d-flex align-items-center gap-3">
-                <span><i class="bi bi-shield-check text-success me-1"></i> Phase 1 Live Prototype</span>
+                <span><i class="bi bi-shield-check text-success me-1"></i> BCrypt & Spring Security Enabled</span>
                 <span>Version 1.0.0</span>
             </div>
         </footer>
@@ -298,4 +319,3 @@
 <script th:src="@{/js/main.js}"></script>
 </body>
 </html>
-

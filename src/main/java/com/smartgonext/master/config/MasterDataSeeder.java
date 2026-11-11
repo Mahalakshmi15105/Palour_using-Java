@@ -1,12 +1,15 @@
 package com.smartgonext.master.config;
 
+import com.smartgonext.config.security.UserRole;
 import com.smartgonext.master.entity.*;
 import com.smartgonext.master.repository.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Component
 public class MasterDataSeeder implements CommandLineRunner {
@@ -16,17 +19,20 @@ public class MasterDataSeeder implements CommandLineRunner {
     private final TenantLookupRepository lookupRepository;
     private final MasterUserRepository masterUserRepository;
     private final PlatformSettingRepository settingRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public MasterDataSeeder(SubscriptionPlanRepository planRepository,
                             TenantRepository tenantRepository,
                             TenantLookupRepository lookupRepository,
                             MasterUserRepository masterUserRepository,
-                            PlatformSettingRepository settingRepository) {
+                            PlatformSettingRepository settingRepository,
+                            PasswordEncoder passwordEncoder) {
         this.planRepository = planRepository;
         this.tenantRepository = tenantRepository;
         this.lookupRepository = lookupRepository;
         this.masterUserRepository = masterUserRepository;
         this.settingRepository = settingRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -34,6 +40,7 @@ public class MasterDataSeeder implements CommandLineRunner {
         seedPlans();
         seedSuperAdmin();
         seedDefaultTenant();
+        seedTenantLookups();
         seedPlatformSettings();
     }
 
@@ -46,12 +53,20 @@ public class MasterDataSeeder implements CommandLineRunner {
     }
 
     private void seedSuperAdmin() {
-        if (masterUserRepository.count() == 0) {
+        Optional<MasterUser> existingOpt = masterUserRepository.findByEmail("superadmin@smartgonext.com");
+        if (existingOpt.isPresent()) {
+            MasterUser existing = existingOpt.get();
+            // Ensure BCrypt hashed password
+            if (!existing.getPasswordHash().startsWith("$2a$") && !existing.getPasswordHash().startsWith("$2b$")) {
+                existing.setPasswordHash(passwordEncoder.encode(existing.getPasswordHash()));
+                masterUserRepository.save(existing);
+            }
+        } else {
             masterUserRepository.save(new MasterUser(
                     "superadmin@smartgonext.com",
-                    "admin123", // In Phase 2 Step 3, BCrypt will hash this
+                    passwordEncoder.encode("admin123"),
                     "SaaS Platform Administrator",
-                    "SUPER_ADMIN",
+                    UserRole.SUPER_ADMIN.name(),
                     "ACTIVE"
             ));
         }
@@ -71,23 +86,50 @@ public class MasterDataSeeder implements CommandLineRunner {
                     "jdbc:mysql://localhost:3306/parlour_java"
             );
             tenantRepository.save(defaultTenant);
+        }
+    }
 
+    private void seedTenantLookups() {
+        Tenant defaultTenant = tenantRepository.findByEmail("admin@smartgonext.com").orElse(null);
+        if (defaultTenant == null && tenantRepository.count() > 0) {
+            defaultTenant = tenantRepository.findAll().get(0);
+        }
+        if (defaultTenant != null) {
+            syncLookup("admin@smartgonext.com", defaultTenant, "parlour_java", UserRole.PARLOUR_ADMIN.name());
+            syncLookup("priya.sharma@smartgonext.com", defaultTenant, "parlour_java", UserRole.BRANCH_ADMIN.name());
+            syncLookup("employee@smartgonext.com", defaultTenant, "parlour_java", UserRole.EMPLOYEE.name());
+            syncLookup("reception@smartgonext.com", defaultTenant, "parlour_java", UserRole.EMPLOYEE.name());
+        }
+    }
+
+    private void syncLookup(String email, Tenant tenant, String dbName, String role) {
+        Optional<TenantLookup> lookupOpt = lookupRepository.findByEmail(email);
+        if (lookupOpt.isEmpty()) {
             lookupRepository.save(new TenantLookup(
-                    "admin@smartgonext.com",
-                    defaultTenant,
-                    "parlour_java",
-                    "jdbc:mysql://localhost:3306/parlour_java",
-                    "ParlourAdmin"
+                    email,
+                    tenant,
+                    dbName,
+                    "jdbc:mysql://localhost:3306/" + dbName,
+                    role
             ));
+        } else {
+            TenantLookup lookup = lookupOpt.get();
+            lookup.setRole(role);
+            lookupRepository.save(lookup);
         }
     }
 
     private void seedPlatformSettings() {
         if (settingRepository.count() == 0) {
-            settingRepository.save(new PlatformSetting("PLATFORM_NAME", "SmartGoNext SaaS", "Global application name"));
-            settingRepository.save(new PlatformSetting("SUPPORT_EMAIL", "support@smartgonext.com", "Master platform support desk"));
+            settingRepository.save(new PlatformSetting("PLATFORM_NAME", "Parlour using java", "Global application name"));
+            settingRepository.save(new PlatformSetting("SUPPORT_EMAIL", "support@parlour.com", "Master platform support desk"));
             settingRepository.save(new PlatformSetting("DEFAULT_CURRENCY", "USD", "Default currency symbol code"));
             settingRepository.save(new PlatformSetting("MAINTENANCE_MODE", "false", "Global maintenance lock"));
+        } else {
+            settingRepository.findBySettingKey("PLATFORM_NAME").ifPresent(setting -> {
+                setting.setSettingValue("Parlour using java");
+                settingRepository.save(setting);
+            });
         }
     }
 }

@@ -11,3 +11,4 @@ public interface WhatsAppCampaignRecipientEntityRepository extends JpaRepository
     List<WhatsAppCampaignRecipientEntity> findByCampaignId(Long campaignId);
     List<WhatsAppCampaignRecipientEntity> findByStatus(String status);
 }
+

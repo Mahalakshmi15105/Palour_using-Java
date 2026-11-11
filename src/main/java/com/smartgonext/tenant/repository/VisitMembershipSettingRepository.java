@@ -10,3 +10,4 @@ import java.util.List;
 public interface VisitMembershipSettingRepository extends JpaRepository<VisitMembershipSetting, Long> {
     List<VisitMembershipSetting> findByStatus(String status);
 }
+

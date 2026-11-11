@@ -11,3 +11,4 @@ public interface CustomerFeedbackRepository extends JpaRepository<CustomerFeedba
     List<CustomerFeedback> findByCustomerId(Long customerId);
     List<CustomerFeedback> findByRating(Integer rating);
 }
+

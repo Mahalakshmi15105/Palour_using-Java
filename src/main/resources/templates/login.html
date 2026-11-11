@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In | SmartGoNext Salon SaaS</title>
+    <title>Sign In | Parlour using java</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" th:href="@{/images/favicon.svg}">
@@ -27,14 +27,14 @@
     <div class="login-glow-1"></div>
     <div class="login-glow-2"></div>
 
-    <div class="login-card">
+    <div class="login-card" style="max-width: 460px;">
         <!-- Logo & Header -->
         <div class="text-center mb-4">
             <div class="brand-icon mx-auto mb-3" style="width: 54px; height: 54px; font-size: 1.6rem;">
                 <i class="bi bi-gem"></i>
             </div>
-            <h3 class="text-white fw-bold mb-1" style="letter-spacing: -0.5px;">SmartGoNext</h3>
-            <p class="text-secondary small text-uppercase mb-0" style="letter-spacing: 1px; color: #d4a373 !important;">Beauty Parlour & Salon SaaS</p>
+            <h3 class="text-white fw-bold mb-1" style="letter-spacing: -0.5px;">Parlour <span style="font-size: 0.9rem; font-weight: 400; opacity: 0.85;">using java</span></h3>
+            <p class="text-secondary small text-uppercase mb-0" style="letter-spacing: 1px; color: #d4a373 !important;">Beauty Parlour & Salon Management</p>
         </div>
 
         <!-- Alert messages -->
@@ -55,7 +55,7 @@
                     <span class="input-group-text bg-transparent border-secondary text-secondary" style="border-color: rgba(255,255,255,0.15) !important;">
                         <i class="bi bi-envelope"></i>
                     </span>
-                    <input type="email" id="email" name="email" class="form-control login-input" placeholder="admin@smartgonext.com" value="admin@smartgonext.com" required>
+                    <input type="email" id="email" name="email" class="form-control login-input" placeholder="admin@smartgonext.com" value="admin@smartgonext.com" required autocomplete="username">
                 </div>
             </div>
 
@@ -68,48 +68,67 @@
                     <span class="input-group-text bg-transparent border-secondary text-secondary" style="border-color: rgba(255,255,255,0.15) !important;">
                         <i class="bi bi-lock"></i>
                     </span>
-                    <input type="password" id="password" name="password" class="form-control login-input" placeholder="••••••••" value="admin123" required>
+                    <input type="password" id="password" name="password" class="form-control login-input" placeholder="••••••••" value="admin123" required autocomplete="current-password">
                 </div>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="rememberMe" checked>
-                    <label class="form-check-label text-secondary small" for="rememberMe">Remember this terminal</label>
+                    <label class="form-check-label text-secondary small" for="rememberMe">Remember terminal</label>
                 </div>
                 <span class="badge bg-dark border border-secondary text-light small py-1 px-2" style="font-size: 0.7rem;">
-                    <i class="bi bi-geo-alt-fill text-warning me-1"></i> Downtown Flagship
+                    <i class="bi bi-shield-lock-fill text-warning me-1"></i> BCrypt Secured
                 </span>
             </div>
 
             <button type="submit" class="btn btn-salon-primary w-100 py-2 fs-6 justify-content-center mb-3">
-                <i class="bi bi-box-arrow-in-right me-2"></i> Access Salon Dashboard
+                <i class="bi bi-box-arrow-in-right me-2"></i> Sign In to Dashboard
             </button>
         </form>
 
-        <!-- Demo Quick Access Hint Box -->
+        <!-- Role Presets Box for Testing -->
         <div class="p-3 rounded-3" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15);">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="small text-light">
-                    <i class="bi bi-key-fill text-warning me-1"></i> <strong>Demo Credentials</strong>:
-                    <div class="text-secondary" style="font-size: 0.75rem;">admin@smartgonext.com / admin123</div>
-                </div>
-                <button type="button" class="btn btn-sm btn-outline-light border-secondary" style="font-size: 0.75rem;" onclick="document.forms[0].submit();">
-                    Auto-Login
+            <div class="small text-light mb-2 fw-semibold d-flex align-items-center justify-content-between">
+                <span><i class="bi bi-people-fill text-warning me-1"></i> Test Role Credentials:</span>
+                <span class="badge bg-secondary" style="font-size: 0.65rem;">Click to Fill</span>
+            </div>
+            <div class="d-grid gap-1" style="font-size: 0.75rem;">
+                <button type="button" class="btn btn-sm btn-outline-light text-start py-1 px-2 d-flex justify-content-between align-items-center"
+                        onclick="setCreds('superadmin@smartgonext.com', 'admin123')">
+                    <span><strong class="text-warning">SUPER_ADMIN</strong>: superadmin@smartgonext.com</span>
+                    <span class="badge bg-dark border border-secondary">admin123</span>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-light text-start py-1 px-2 d-flex justify-content-between align-items-center"
+                        onclick="setCreds('admin@smartgonext.com', 'admin123')">
+                    <span><strong class="text-info">PARLOUR_ADMIN</strong>: admin@smartgonext.com</span>
+                    <span class="badge bg-dark border border-secondary">admin123</span>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-light text-start py-1 px-2 d-flex justify-content-between align-items-center"
+                        onclick="setCreds('priya.sharma@smartgonext.com', 'staff123')">
+                    <span><strong class="text-primary">BRANCH_ADMIN</strong>: priya.sharma@smartgonext.com</span>
+                    <span class="badge bg-dark border border-secondary">staff123</span>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-light text-start py-1 px-2 d-flex justify-content-between align-items-center"
+                        onclick="setCreds('employee@smartgonext.com', 'staff123')">
+                    <span><strong class="text-success">EMPLOYEE</strong>: employee@smartgonext.com</span>
+                    <span class="badge bg-dark border border-secondary">staff123</span>
                 </button>
             </div>
         </div>
 
-        <!-- Footer Note -->
-        <div class="text-center mt-4">
-            <span class="text-secondary small" style="font-size: 0.75rem;">
-                Protected by SmartGoNext Cloud Security &bull; Phase 1 Prototype
-            </span>
+        <div class="text-center mt-3">
+            <span class="text-secondary small" style="font-size: 0.72rem;">&copy; 2026 Parlour using java &bull; Multi-Tenant Salon ERP</span>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function setCreds(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+        }
+    </script>
 </body>
 </html>
-

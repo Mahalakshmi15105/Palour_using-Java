@@ -10,3 +10,4 @@ import java.util.Optional;
 public interface WhatsAppSettingsRepository extends JpaRepository<WhatsAppSettings, Long> {
     Optional<WhatsAppSettings> findByStatus(String status);
 }
+

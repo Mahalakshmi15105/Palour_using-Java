@@ -10,3 +10,4 @@ import java.util.List;
 public interface WhatsAppCampaignEntityRepository extends JpaRepository<WhatsAppCampaignEntity, Long> {
     List<WhatsAppCampaignEntity> findByStatus(String status);
 }
+
